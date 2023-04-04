@@ -1,3 +1,4 @@
+// La información que presento a continuación la saque del repositorio https://github.com/erik-sytnyk/movies-list/blob/master/db.json
 let filmes = [
     {
         id : 1,
@@ -295,6 +296,48 @@ let filmes = [
 ]
 
 let movies = filmes.map(film => {
-    return new Movies(film.id, film.title, Number(film.year), Number(film.runtime), film.genres, film.director, film.actors.split(","))
+    return new Movies(film.id, film.title, Number(film.year), Number(film.runtime), film.genres, film.director.toLowerCase(), film.actors.split(","))
 })
-console.log(movies)
+let welcome = 0
+let condition = false
+do {
+    welcome = Number(prompt("--------------Bienvenido al top 20 de peliculas--------------\n Presione: \n 1. Para conocer el listado de peliculas \n 2. para filtar peliculas por años \n 3. para filtar por autor"))
+    if (isNaN(welcome)){
+        alert("No ingresaste un número, intentalo de nuevo")
+        condition = true
+    }else if (welcome!= 1 && welcome!=2 && welcome!=3 ){
+        alert("Ingresaste un número invalido, intentalo de nuevo")
+        condition = true
+    }else{
+        condition = false
+    }    
+} while (condition);
+
+switch (welcome) {
+    case 1:
+        let listMovies = "------------ Listado de Peliculas ----------- \n"
+        movies.forEach(movie => {
+        listMovies += movie.id + ". " + movie.title + "\n"  
+        })
+        alert(listMovies)
+        break
+
+    case 2:
+        let year = Number(prompt("Quieres saber peliculas mayores a que año?"))
+        let listFilterYear = movies.filter(movie => movie.year > year)
+        for( const movie of listFilterYear){
+            alert("- Pelicula: " + movie.title + " estrenada en el año de " + movie.year + " y con una duración de " + movie.runtime + " minutos")
+        }
+        break
+    
+    case 3:
+        let director = prompt("Ingrese el nombre del director que quiere buscar").toLowerCase()
+        let directorMovie = movies.find(movie => movie.director === director)
+        alert("- Pelicula: " + directorMovie.title + " estrenada en el año de " +  directorMovie.year + " y dirigida por " +  directorMovie.director)
+        break
+
+    default:
+        break
+}
+
+
